@@ -1,0 +1,4 @@
+name: PoisonBungee
+main: me.ufo.poison.bungee.PoisonBungeePlugin
+version: 1.0-SNAPSHOT
+author: ufo
