@@ -1,0 +1,6 @@
+name: Poison
+main: me.ufo.poison.lobby.PoisonPlugin
+version: 1.0-SNAPSHOT
+author: ufo
+commands:
+  poison:

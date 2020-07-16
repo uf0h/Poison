@@ -17,10 +17,10 @@
     </repositories>
 
     <modules>
-        <module>spigot</module>
         <module>bungee</module>
-        <module>common</module>
-        <module>independent</module>
+        <module>lobby</module>
+        <module>destination</module>
+        <module>shared</module>
     </modules>
 
 </project>

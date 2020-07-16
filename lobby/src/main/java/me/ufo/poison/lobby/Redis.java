@@ -1,4 +1,4 @@
-package me.ufo.poison.bungee;
+package me.ufo.poison.lobby;
 
 import me.ufo.poison.shared.RedisAction;
 import me.ufo.poison.shared.RedisProvider;

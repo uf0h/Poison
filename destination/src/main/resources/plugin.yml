@@ -1,0 +1,6 @@
+name: PoisonHub
+main: me.ufo.poison.destination.PoisonPlugin
+version: 1.0-SNAPSHOT
+author: ufo
+commands:
+  poison:
