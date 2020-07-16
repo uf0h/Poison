@@ -1,9 +1,8 @@
-package me.ufo.poison.bukkit;
+package me.ufo.poison.spigot;
 
 import me.ufo.poison.common.RedisAction;
 import me.ufo.poison.common.RedisProvider;
 import org.redisson.Redisson;
-import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 
 public final class Redis implements RedisProvider {
@@ -15,9 +14,8 @@ public final class Redis implements RedisProvider {
     }
 
     @Override
-    public <T> void action(RedisAction action, T object) {
-        final RTopic topic = this.redissonClient.getTopic(action.toString());
-        topic.publishAsync(object);
+    public <T> void publish(RedisAction action, T object) {
+        this.redissonClient.getTopic("POISON:" + action.toString()).publish(object);
     }
 
     @Override

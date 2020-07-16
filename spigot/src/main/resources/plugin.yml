@@ -1,5 +1,5 @@
 name: PoisonHub
-main: me.ufo.poison.bukkit.PoisonHubPlugin
+main: me.ufo.poison.spigot.PoisonHubPlugin
 version: 1.0-SNAPSHOT
 author: ufo
 commands:

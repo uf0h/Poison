@@ -1,23 +1,24 @@
-package me.ufo.poison.bukkit;
+package me.ufo.poison.spigot;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.ufo.poison.common.RedisAction;
 import me.ufo.poison.common.ServerInfo;
+import me.ufo.poison.common.ServerStatus;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.redisson.api.RTopic;
 import org.redisson.api.redisnode.RedisNodes;
 import org.redisson.client.RedisConnectionException;
 
-public final class PoisonHubPlugin extends JavaPlugin implements CommandExecutor, Listener {
+public final class PoisonHubPlugin extends JavaPlugin implements CommandExecutor {
 
     private final Redis redis;
-    private final ServerInfo serverInfo;
+    private final Gson gson;
+    private final String serverID;
 
     public PoisonHubPlugin() {
         this.saveDefaultConfig();
@@ -25,7 +26,8 @@ public final class PoisonHubPlugin extends JavaPlugin implements CommandExecutor
             this.getConfig().getString("redis.address"),
             this.getConfig().getInt("redis.port")
         );
-        this.serverInfo = new ServerInfo(this.getConfig().getString("server.id"));
+        this.gson = new GsonBuilder().disableHtmlEscaping().create();
+        this.serverID = this.getConfig().getString("server.id");
     }
 
     @Override
@@ -39,8 +41,11 @@ public final class PoisonHubPlugin extends JavaPlugin implements CommandExecutor
 
     @Override
     public void onEnable() {
-        this.getServer().getPluginManager().registerEvents(this, this);
         this.getCommand("poison").setExecutor(this);
+
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            this.redis.publish(RedisAction.SERVER_UPDATE, this.getServerInfo());
+        }, 50L, 50L);
     }
 
     @Override
@@ -48,29 +53,27 @@ public final class PoisonHubPlugin extends JavaPlugin implements CommandExecutor
 
     }
 
+    // debug
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        RTopic topic = this.getRedis().getRedisson().getTopic(RedisAction.SERVER_UPDATE.toString());
-        sender.sendMessage(new String[]{
-            "players: " + serverInfo.getPlayers(),
-            "listeners: " + topic.countListeners(),
-            "name: " + topic.getChannelNames()
-        });
-
-        this.serverInfo.setPlayers(this.serverInfo.getPlayers() + 1);
-        this.redis.action(RedisAction.SERVER_UPDATE, this.serverInfo);
-
+        final ServerInfo info =
+            new ServerInfo(this.serverID, ThreadLocalRandom.current().nextInt(0, 100), ServerStatus.ONLINE);
+        this.redis.publish(RedisAction.SERVER_UPDATE, this.gson.toJson(info));
         return false;
-    }
-
-    @EventHandler
-    public void onPlayerJoinEvent(PlayerJoinEvent e) {
-        this.serverInfo.setPlayers(this.serverInfo.getPlayers() + 1);
-        this.redis.action(RedisAction.SERVER_UPDATE, this.serverInfo);
     }
 
     public Redis getRedis() {
         return redis;
+    }
+
+    private String getServerInfo() {
+        return this.gson.toJson(
+            new ServerInfo(
+                serverID,
+                this.getServer().getOnlinePlayers().size(),
+                this.getServer().hasWhitelist() ? ServerStatus.WHITELISTED : ServerStatus.ONLINE
+            )
+        );
     }
 
 }

@@ -5,7 +5,6 @@ public enum RedisAction {
     PLAYER_ADD,
     PLAYER_REMOVE,
     PLAYER_SEND,
-    SERVER_UPDATE
-
+    SERVER_UPDATE;
 
 }

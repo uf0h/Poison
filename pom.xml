@@ -17,7 +17,7 @@
     </repositories>
 
     <modules>
-        <module>bukkit</module>
+        <module>spigot</module>
         <module>bungee</module>
         <module>common</module>
         <module>independent</module>
