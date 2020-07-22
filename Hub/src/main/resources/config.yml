@@ -1,0 +1,12 @@
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: ""
+
+server-id: "hub-1"
+queues: "factions"
+
+messages:
+  joined: "&7You have joined the queue for &b%destination%&7."
+  position: "&eYou are position &b%pos% &eout of &b%pos-max%&e."
+  sending: "&ePlease standby, you are being moved to the server..."

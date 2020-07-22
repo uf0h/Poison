@@ -1,0 +1,3 @@
+name: Poison
+main: me.ufo.poison.bungee.PoisonPlugin
+version: 1.0

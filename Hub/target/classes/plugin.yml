@@ -1,0 +1,5 @@
+name: Poison
+main: me.ufo.poison.hub.PoisonPlugin
+version: 1.0
+commands:
+  joinqueue:
