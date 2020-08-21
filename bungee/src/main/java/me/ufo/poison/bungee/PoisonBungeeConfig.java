@@ -15,7 +15,7 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 public final class PoisonBungeeConfig {
-
+    
     private final String address;
     private final int port;
 

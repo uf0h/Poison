@@ -2,7 +2,7 @@ redis:
   address: "127.0.0.1"
   port: 6379
 
-queue-servers:
+hub-servers:
   hub-1:
   hub-2:
 
